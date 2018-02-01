@@ -1,0 +1,50 @@
+1) to compile a program javac file.java
+2) to run the program java classname
+3) create a class which we use to run the program
+4) program starts comiling from main function.
+6) each line ends with ';'
+7) To print to screen System.out.println() or System.out.print()  (difference is new line and same line)
+	System.out.printf("******** %s", var_name);  // similar to C
+8) defining variable is write the data type and and then declare the variable
+9) to read from user  :   import java.util.Scanner;  
+	create scanner variable  :   Scanner Scanner_var_name = new Scanner(System.in);
+	read                     :   var  = Scanner_var_name.nextDouble();     // we must use nextLine() to read string nextInt for int so on
+10) we can use ++ or -- operator both pre and post increment or decrement is possible.
+11) +=,-=,*=,/= ..... can be used
+12) if, else, else if is same as C, && , || can be used .
+13) switch(condition_){
+	case val:
+		func;
+		break;
+	.
+	.
+	.
+	.
+
+	default:
+		func;
+		break;
+	}
+14) while , do{ .. } while(cond); same as C.
+15) To use multiple class just create a class in a different file in same folder.
+	class_name classobj = new class_name();   // this classobj is a kind of variable
+	now use this obj
+16) to create a constructor create a new method and name it same as ur class name.
+17) one line if statement condition ? function1() : function2();
+18) for loop same as C.
+	Enhanced for loop is also supported in java similar to python.
+	for(datatype var,array_name){....}
+19) To use math functions need not import anything use Math.pow(arg1,arg2)  // any other function
+20) Math.ceil(),Math.floor(),Math.max() .... 
+21) for Random    :  import java.util.Random;
+	// create random obj
+	Random rand_obj = new Random();
+	rand_obj.nextInt(maxofrange);
+22) Array : datatype var[] = new datatype[length_of_array];
+	    datatype var[]  = {.....};
+23) Array length, array.length
+24) Pass array to function same as C
+25) Multi dimentional array same as C.
+26) if u dont know how many arg u'll send to an arg use :   methodname(datatype...var_name){   }
+	// those dots are a part of syntex and the var_name will be an array
+27) 
