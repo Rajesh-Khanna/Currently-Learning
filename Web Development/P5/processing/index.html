@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>processing</title>
+	<script src="libraries/p5.js"></script>
+	<script src="libraries/p5.dom.js"></script>
+	<script src="libraries/p5.sound.js"></script>
+	<script src="sketch.js"></script>
+	<script src="song_practice.js"></script>
+	<script src="cord_practice.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+
+	<style>
+		body {
+			margin:0;
+			padding:0;
+		}
+		h2{
+
+		}
+		#list_cords{
+			display: grid;
+			grid-template-columns:repeat(8,1fr);
+			grid-gap : 1em;
+		}
+
+		#list_cords > div{
+			background : #eee;
+			padding: 1em; 
+			transition: 0.5s;
+		}
+
+		#list_cords > div:hover{
+			background : #ddd;
+
+		}
+
+		canvas {
+			margin:auto;
+		}
+	</style>
+</head>
+<body>
+	<h2>
+		<center>
+		<button type="button" id='b' name="Practice" onclick="practice()">Practice</button>
+	</center>
+	</h2>
+</body>
+</html>

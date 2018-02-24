@@ -1,0 +1,10 @@
+1. To inititalize Django:
+$ django-admin startproject site_name
+
+2. To start a new app
+$ python3 manage.py startapp app_name
+
+3. To see the web page run the server
+$ python3 manage.py runserver
+
+4. 

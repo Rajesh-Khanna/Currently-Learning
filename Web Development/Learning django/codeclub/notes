@@ -1,0 +1,4 @@
+in models we create databases
+each databases is a class
+ForeignKey gives the list of the elements present in the class we linked it to
+to check some test functions run python3 manage.py shell
