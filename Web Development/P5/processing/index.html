@@ -11,12 +11,14 @@
 	<script src="sketch.js"></script>
 	<script src="song_practice.js"></script>
 	<script src="cord_practice.js"></script>
+	<script src="Clock.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
 
 	<style>
 		body {
 			margin:0;
 			padding:0;
+			display: inline;
 		}
 		h2{
 
@@ -35,7 +37,32 @@
 
 		#list_cords > div:hover{
 			background : #ddd;
-
+		}
+		#song_line{
+			background : #eee;
+			padding: 1em; 
+			margin:0.5em;
+			transition: 0.5s;
+			display: inline-block;
+			border-radius: 0.5em;
+		}
+		#close{
+			display: inline-block;
+			margin-left:  1em;
+			color: #ff6a44;
+			font-family: Sans-serif;
+			transition: 0.3s;
+		}
+		#close{
+			border-width: 0px;
+			background-color: #eee; 
+		}
+		#close:hover{
+			color : #ff0000;
+			cursor: pointer;
+		}
+		#song_line:hover{
+			background : #ddd;
 		}
 
 		canvas {

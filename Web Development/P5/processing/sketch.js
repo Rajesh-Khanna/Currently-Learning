@@ -1,6 +1,6 @@
 var cn,sound,beat,slider,freq,start,stop,d2,t=-1,cnv,sh = 50,cord_data = [],song_data=[],checkbox=[],practice_cords = [];
 var ref,run=false,controls,uploads,Name,new_string='XXXXXX';
-var radio,SP=null,CP;
+var radio,SP=null,CP,CLOCK;
 var cd = [' ',4,0,'XXXXXX',notes=[]];
 var time = 0;
 var e = 0;
@@ -161,10 +161,13 @@ function errData(Data){
 }
 
 function practice(){
+	CLOCK = new Clock();
 	if (controls){
+		resizeCanvas(400,600);
 		document.getElementsByTagName('body')[0].removeChild(document.getElementById('controls'));
 		b = document.getElementById('b');
 		uploads = createDiv('Name : ');
+		line_break = createElement('br');
 		uploads.id('uploads');
 		c_note = [];
 		s_note=[0,0,0];
@@ -173,6 +176,21 @@ function practice(){
 		Name.parent(uploads);
 		submit = createButton('submit');
 		reset = createButton('Reset');
+		add_songs = createButton('add_songs');
+		add_songs.id('add_songs');
+		add_songs.mousePressed(function(){
+			if(document.getElementById('new_song')){
+				/*
+				*********temp **************
+				need to create a class new_cords
+				till then temp
+				*/
+				document.getElementById('uploads').removeChild(document.getElementById('new_song'));
+			}
+			else{
+				var load_song = new song_load();
+			}
+		});
 		reset.mousePressed(function(){
 			new_string = 'XXXXXX';
 			c_note = [];
@@ -213,17 +231,22 @@ function practice(){
 		});
 		submit.parent(uploads);
 		reset.parent(uploads);
+		line_break.parent(uploads);
+		add_songs.parent(uploads);
 		controls = null;
 		b.innerHTML = 'Practice';
 	}else{
+		resizeCanvas(800,600);
 		if(document.getElementById('uploads'))
 			document.getElementsByTagName('body')[0].removeChild(document.getElementById('uploads'));
 		sh = 50;
 		controls = createDiv('Volume ');
 		controls.id('controls');
 		slider = createSlider(0,1,0.5,0.01);
-		freq = createSlider(0,300,60,1);
+		freq = createSlider(0,180,60,1);
+		freq.style('width', '50%');
 		start = createButton('start');
+		start.attribute('disabled', '');
 		slider.parent(controls);
 		createElement('br').parent(controls);
 		d2 = createElement('span','BPM : 60 ');
@@ -265,10 +288,14 @@ function practice(){
 		console.log(cord_data.length);
 		//mode = createButton('Practice songs');
 		for (i=0;i<cord_data.length;i++){
-			checkbox.push(createCheckbox((i+1).toString()+' .'+cord_data[i][0], false));
+			if(checkbox.length!=cord_data.length){
+					checkbox.push(createCheckbox((i+1).toString()+' .'+cord_data[i][0], false));
+					checkbox[i].parent(cord_selector);
+					checkbox[i].class('min1');
+					checkbox[i].changed(min_change);
+			}
 			checkbox[i].parent(cord_selector);
-			checkbox[i].class('min1');
-			checkbox[i].changed(min_change);
+							
 		}
 	}
 }
@@ -280,10 +307,16 @@ function min_change(){
 	if(this.checked()){
 		practice_cords.push(cord_data[i-1]);
 		cd = cord_data[i-1];
+		if(practice_cords.length == 1)
+		    start.removeAttribute('disabled');
 	}
 	else{
 		index = practice_cords.findIndex(x => x[0]==m);
 		practice_cords.splice(index,1);
+		if(practice_cords.length == 0){
+			start.attribute('disabled', '');
+			run = false;
+		}
 	}
 }
 
@@ -296,7 +329,7 @@ function draw() {
 		bf = beatf/60;
 		var T = 1000/bf;
 		if(run){
-			var millisecond = Math.floor(millis()/T)	;
+			var millisecond = CLOCK.freqBPM(freq.value());
 			if(t!=millisecond){
 				cd = practice_cords[Math.floor(Math.random()*(practice_cords.length))];
 				if(millisecond%4!=3)
@@ -304,7 +337,9 @@ function draw() {
 				else
 					beat.play();
 			}
-			clock();
+			xyz = CLOCK.analogClock(e,time);
+			e = xyz[0];
+			time = xyz[1];			
 			sound.setVolume(slider.value());
 			beat.setVolume(slider.value());
 			t=millisecond;
@@ -373,34 +408,4 @@ function metronome(t){
 	rect(515, 50, 50, 50, 10);
 	fill(0);
 	strokeWeight(4);
-}
-
-
-function clock(){
-	var dat = new Date();
-	if(time != dat.getSeconds()){
-		e+=1;
-		time = dat.getSeconds();
-	}
-	if(e == 60){
-		e=0;
-		time=0;
-		run = false;
-	}
-	fill('#a70be0');
-	strokeWeight(0);
-	ellipse(700,100,115,115);
-	fill(255);
-	ellipse(700,100,105,105);
-	fill('#ff00ff');
-	strokeWeight(0);
-	angleMode(DEGREES);
-	arc(700, 100, 100, 100, -90 ,(e+dat.getMilliseconds()/1000)*6-90);
-	fill(255);
-	ellipse(700,100,90,90);
-	fill(0)
-	strokeWeight(4);
-	textAlign(CENTER,CENTER);
-	textSize(60);
-	text(e.toString(),700,100);
 }
