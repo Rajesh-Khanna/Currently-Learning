@@ -8,11 +8,11 @@ class song_practice{
 		this.radio = radio;
 		this.radio.parent(this.song_selector);
 		this.radio.class('min1');
-		for (i=0;i<song_data.length;i++){
+		for (i=radio.elt.children.length;i<song_data.length;i++){
 			this.radio.option((i+1).toString()+' .'+song_data[i][0], 1);
 		}
 		document.getElementById('mode').innerHTML = 'practice cords';
-
+		
 	}
 }
 
@@ -40,7 +40,7 @@ class songLine{
 		return this.line;
 	}
 	getobj_cord(){
-		return parseInt(this.cord_selector.value().split(".")[0]);
+		return parseInt(this.cord_selector.value());
 	}
 	getStruming_p(){
 		return this.struming_pattern.value();
@@ -49,10 +49,13 @@ class songLine{
 }
 
 class song_load{
-	constructor(){
+	constructor(song_ref){
 		add_songs.html('add_cords');
 		var new_song = createDiv('Enter the cords and struming patterns <br/>');
 		new_song.id('new_song');
+		var song_name = createInput();
+		song_name.id('song_name');
+		song_name.parent(new_song);
 		var new_song_lines = createDiv('');
 		new_song_lines.id('new_song_lines');
 		new_song_lines.parent(new_song);
@@ -69,12 +72,21 @@ class song_load{
 		});
 		var sub = createButton('Submit');
 		sub.parent(new_song); 										 // temp
+		var cd_name = [];
+		var strmp = [];
 		sub.mousePressed(function(){
-				for(i=0;i<struming.length;i++)
-				{
+				for(i=0;i<struming.length;i++){
+					cd_name.push(struming[i].getobj_cord());
+					strmp.push(struming[i].getStruming_p());
 					console.log(struming[i].getobj_cord());
 					console.log(struming[i].getStruming_p());
 				}
+				var dat = {
+					name : song_name.value(),
+					cord : cd_name,
+					strum : strmp
+				};
+				song_ref.push(dat);
 			});
 	}
 }

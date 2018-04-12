@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>VISCOM</title>
+
+	<!-- <script src="libraries/p5.js"></script>
+	<script src="libraries/p5.dom.js"></script>
+	<script src="libraries/p5.sound.js"></script> -->
+	<!-- <script src="sketch.js"></script> -->
+	<script type="text/javascript" src = 'node_modules/svg.js/dist/svg.min.js'></script>
+	<link rel="stylesheet" href="index.css">
+	<style>
+		body {
+			margin:0;
+			padding:0;
+			overflow: hidden;
+		}
+		canvas {
+			margin-top:2em;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div id="nav">
+			<center>
+			<div  class="emotions" name="Happy">Emotion: Happy</div>
+		</center>
+		</div>
+		<div class="colorSelector">
+			<div class="clselector">
+				<ul>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+					<li> </li>
+				</ul>
+			</div>
+			<div class="pickerHSL">
+				<div class="slidecontainer">
+  				<input type="range" min="0" max="360" value="50" class="slider" id="Hue">
+				</div>
+				<div class="slidecontainer">
+  				<input type="range" min="0" max="100" value="100" class="slider" id="Saturation">
+				</div>
+				<div class="slidecontainer">
+					<input type="range" min="0" max="100" value="50" class="slider" id="Lightness">
+				</div>
+			</div>
+		</div>
+		<div id="canvs">
+			<div id="drawboard">
+
+			</div>
+			<div class="feedback">
+
+			</div>
+		</div>
+		<div class="shapesSelector">
+			<div id="shelves">
+
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="index.js" charset="utf-8"></script>
+</html>

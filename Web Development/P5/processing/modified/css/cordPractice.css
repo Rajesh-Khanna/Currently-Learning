@@ -1,0 +1,27 @@
+#canvs{
+  margin: 10px;
+}
+
+.wraper{
+  display: grid;
+  justify-items:center;
+}
+
+.control_button{
+  cursor: pointer;
+  border: none;
+  outline:none;
+}
+
+#chord_list{
+  margin-top: 10px;  
+}
+
+#controls > button{
+  border-width: 0px;
+  background: #fff;
+  /* border-radius: 10px; */
+  cursor: pointer;
+  /* border-radius: 50%; */
+  justify-self: center;
+}

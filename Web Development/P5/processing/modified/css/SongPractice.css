@@ -1,0 +1,42 @@
+#wraper{
+
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: 50% 50%;
+  grid-auto-rows: minmax(100px,auto);
+  justify-items : center;
+  align-items: center;
+  /* align-items: center; */
+}
+
+#canvs{
+  visibility: hidden;
+}
+
+#controls{
+  grid-column: 1/2;
+  /* grid-row: 2/3; */
+}
+
+#controls > button{
+  border-width: 0px;
+  background: #fff;
+  /* border-radius: 10px; */
+  cursor: pointer;
+  /* border-radius: 50%; */
+  justify-self: center;
+}
+
+#song_list{
+  grid-column: 1/2;
+  /* grid-row: 2/3; */
+}
+
+.metronome{
+  grid-row: 1/3;
+  grid-column: 2/3;
+}
+
+#song_list{
+  margin: 25px;
+}

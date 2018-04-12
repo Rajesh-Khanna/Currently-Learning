@@ -1,10 +1,21 @@
 class Clock{
-	constuctor(){
+	constructor(){
+		this.start_time = 0;
 		this.dat = new Date();
 	}
 	/*
 	Returns time in sec upto 2 significant fig
 	*/
+	countStart(){
+		this.dat = new Date();
+		console.log(this.start_time);
+		this.start_time = this.dat.getTime();
+	}
+	timeCount(){
+		this.dat = new Date();
+		return this.dat.getTime()-this.start_time;
+	}
+
 	sec(){
 		this.dat = new Date();
 		return this.dat.getSeconds();
@@ -27,13 +38,13 @@ class Clock{
 		var timePeriod = 60/BPMf;
 		return Math.floor(this.sec_ml()/timePeriod);
 	}
-	analogClock(e,time){
+	analogClock(e,time,end){
 		dat = new Date();
 		if(time != dat.getSeconds()){
 			e+=1;
 			time = dat.getSeconds();
 		}
-		if(e == 60){
+		if(e == end){
 			e=0;
 			time=0;
 			run = false;

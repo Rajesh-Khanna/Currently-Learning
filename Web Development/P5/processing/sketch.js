@@ -1,8 +1,10 @@
 var cn,sound,beat,slider,freq,start,stop,d2,t=-1,cnv,sh = 50,cord_data = [],song_data=[],checkbox=[],practice_cords = [];
-var ref,run=false,controls,uploads,Name,new_string='XXXXXX';
+var ref,song_ref,run=false,controls,uploads,Name,new_string='XXXXXX';
 var radio,SP=null,CP,CLOCK;
+var c_note = [],s_note=[0,0,0];
 var cd = [' ',4,0,'XXXXXX',notes=[]];
-var time = 0;
+//var cd2 = [' ',4,0,'XXXXXX',notes=[]];
+var time = 0,fr_size = 1;
 var e = 0;
 
 function preload(){
@@ -15,34 +17,74 @@ function preload(){
      projectId: "guitar-learner",
      storageBucket: "",
      messagingSenderId: "206644498703"
-   };
-   firebase.initializeApp(config);
-	 var database = firebase.database();
-	 ref = database.ref('cords');
-	 ref.on('value',gotData,errData);
+    };
+    firebase.initializeApp(config);
+	  var database = firebase.database();
+	  ref = database.ref('cords');
+	  song_ref = database.ref().child('songs');
+	  song_ref.on('value',gotSongData,errData);
+	  ref.on('value',gotData,errData);		 
 }
-var c_note = [],s_note=[0,0,0];
 
+function gotSongData(Data){
+	//console.log(Data.val());
+	dta = Data.val()
+	var keys = Object.keys(dta);
+	//console.log(keys);
+	for(i=0;i<keys.length;i++){
+		var k = keys[i];
+		var nm = dta[k].name;
+		var crd = dta[k].cord;
+		var Strm = dta[k].strum;
+		dat = [nm,crd.slice(),Strm.slice()];
+		song_data.push(dat);
+	}
+	console.log(song_data.length);
+}
 
-function neck_diagram(frats=24,start_frat=0,strings='XXXXXX',notes=[]){
+function gotData(Data){
+	//console.log(Data.val());
+	dta = Data.val()
+	var keys = Object.keys(dta);
+	//console.log(keys);
+	for(i=0;i<keys.length;i++){
+		var k = keys[i];
+		var nm = dta[k].name;
+		var ft = dta[k].frats;
+		var stf = dta[k].start_frat;
+		var stg = dta[k].strings;
+		var nts = dta[k].notes;
+		dat = [nm,ft,stf,stg,nts.slice()]
+		cord_data.push(dat);
+	}
+	console.log(cord_data.length);
+	practice();
+	practice();
+}
+
+function errData(Data){
+	console.log(Data);
+}
+
+function neck_diagram(frats=24,start_frat=0,strings='XXXXXX',notes=[],fraction,offset){
 	if(frats<4)
 		frats=4;
-	h = 80;
-	w = 50;
-	var x= 50;
-	var y= 50;
+	h = 80*fraction;
+	w = 50*fraction;
+	var x= offset*6*50 + 50+50*(1-fraction);
+	var y= 20+h*2*(1-fraction);
 	// neck bar
-	strokeWeight(15);
-	textSize(15);
+	strokeWeight(15*fraction);
+	textSize(15*fraction);
 	line(x,y,w*5+x,y);
-	strokeWeight(4);
-	text(start_frat.toString(),x-20,y);
+	strokeWeight(4*fraction);
+	text(start_frat.toString(),x-20*fraction,y);
 	
 	// strings
 	Yy = y;
 	Xx = x;
 	for(var i=0;i<6;i++){
-		text(strings[i].toString(),Xx,Yy-20);
+		text(strings[i].toString(),Xx,Yy-20*fraction);
 		line(Xx,Yy,Xx,Yy+h*(frats));
 		Xx+=w;
 	}
@@ -51,7 +93,7 @@ function neck_diagram(frats=24,start_frat=0,strings='XXXXXX',notes=[]){
 	Yy+=h;
 	pos = start_frat+1;
 	for(i=0;i<frats;i++){
-		text(pos.toString(),x-20,Yy);
+		text(pos.toString(),x-20*fraction,Yy);
 		pos+=1;
 		line(x,Yy,x+5*w,Yy);
 		Yy+=h;
@@ -90,6 +132,7 @@ String.prototype.replaceAt=function(index, char) {
 
 function setup() {
 	cnv = createCanvas(800, 600);
+	cnv.parent('canvs');
 	cnv.mouseWheel(function(event){
 			if(controls){}
 			else{
@@ -136,32 +179,10 @@ function setup() {
 
 }
 
-function gotData(Data){
-	//console.log(Data.val());
-	dta = Data.val()
-	var keys = Object.keys(dta);
-	//console.log(keys);
-	for(i=0;i<keys.length;i++){
-		var k = keys[i];
-		var nm = dta[k].name;
-		var ft = dta[k].frats;
-		var stf = dta[k].start_frat;
-		var stg = dta[k].strings;
-		var nts = dta[k].notes;
-		dat = [nm,ft,stf,stg,nts.slice()]
-		cord_data.push(dat);
-	}
-	console.log(cord_data.length);
-	practice();
-	practice();
-}
-
-function errData(Data){
-	console.log(Data);
-}
 
 function practice(){
 	CLOCK = new Clock();
+	CLOCK.countStart();
 	if (controls){
 		resizeCanvas(400,600);
 		document.getElementsByTagName('body')[0].removeChild(document.getElementById('controls'));
@@ -188,7 +209,7 @@ function practice(){
 				document.getElementById('uploads').removeChild(document.getElementById('new_song'));
 			}
 			else{
-				var load_song = new song_load();
+				var load_song = new song_load(song_ref);
 			}
 		});
 		reset.mousePressed(function(){
@@ -198,36 +219,35 @@ function practice(){
 			sh = 50;
 		});
 		submit.mousePressed(function(){
-		mi = 30;
-		mx = 0;
-		for(i=0;i<c_note.length;i++){
-			if(c_note[i][1]<mi){
-				mi = c_note[i][1];
+			mi = 30;
+			mx = 0;
+			for(i=0;i<c_note.length;i++){
+				if(c_note[i][1]<mi){
+					mi = c_note[i][1];
+				}
+				if(c_note[i][1]>mx){
+					mx = c_note[i][1];
+				}
+				c_note[i][2] = (i+1);
 			}
-			if(c_note[i][1]>mx){
-				mx = c_note[i][1];
-			}
-			c_note[i][2] = (i+1);
-		}
-		Frats = mx-mi+1;
-		sf = mi;
-		if(Frats<4)
-			sf-=1;
-		
-
-		data = {
-				name : Name.value(),
-				frats : Frats,
-				start_frat : sf,
-				strings : new_string,
-				notes : c_note
-			}
-		console.log(data);
-		ref.push(data);
-		new_string = 'XXXXXX';
-			c_note = [];
-			s_note=[0,0,0];
-		sh = 50;
+			Frats = mx-mi+1;
+			sf = mi;
+			if(Frats<4)
+				sf-=1;
+			
+			data = {
+					name : Name.value(),
+					frats : Frats,
+					start_frat : sf,
+					strings : new_string,
+					notes : c_note
+				}
+			console.log(data);
+			ref.push(data);
+			new_string = 'XXXXXX';
+				c_note = [];
+				s_note=[0,0,0];
+			sh = 50;
 		});
 		submit.parent(uploads);
 		reset.parent(uploads);
@@ -273,10 +293,15 @@ function practice(){
 			if(!SP){
 				SP = new song_practice(radio,controls,song_data);
 				CP = null;
+				console.log(song_data[0]);
+				resizeCanvas(400,300);
+				fr_size = 0.5;
 			}
 			else{
 				CP = new cord_practice(checkbox,controls,cord_data,cord_selector);
 				SP = null;
+				resizeCanvas(800,600);
+				fr_size = 1;
 			}
 		});
 		b = document.getElementById('b');
@@ -294,8 +319,7 @@ function practice(){
 					checkbox[i].class('min1');
 					checkbox[i].changed(min_change);
 			}
-			checkbox[i].parent(cord_selector);
-							
+			checkbox[i].parent(cord_selector);				
 		}
 	}
 }
@@ -328,36 +352,50 @@ function draw() {
 		beatf = freq.value();
 		bf = beatf/60;
 		var T = 1000/bf;
+		//console.log(CP);
 		if(run){
-			var millisecond = CLOCK.freqBPM(freq.value());
-			if(t!=millisecond){
-				cd = practice_cords[Math.floor(Math.random()*(practice_cords.length))];
-				if(millisecond%4!=3)
-					sound.play();
-				else
-					beat.play();
-			}
-			xyz = CLOCK.analogClock(e,time);
-			e = xyz[0];
-			time = xyz[1];			
-			sound.setVolume(slider.value());
-			beat.setVolume(slider.value());
-			t=millisecond;
-			metronome(t);
-			/*if(millisecond%2){
-				text("#",450,150);
-			}
-			else{
-				text(" ",450,150);
-			}
-			*/
-			t = millisecond;
+			if(SP == null)
+			{
+				var beat8 = CLOCK.freqBPM(2*freq.value());
+				millisecond = Math.floor(beat8/2);	
+				if(t!=millisecond){
+					//cd = JSON.parse(JSON.stringify(cd2));
+					cd = practice_cords[Math.floor(Math.random()*(practice_cords.length))];
+					if(millisecond%4!=3)
+						sound.play();
+					else
+						beat.play();
+				}
+				xyz = CLOCK.analogClock(e,time,60);
+				e = xyz[0];
+				time = xyz[1];			
+				sound.setVolume(slider.value());
+				beat.setVolume(slider.value());
+				t=millisecond;
+				metronome(t);
+				/*if(millisecond%2){
+					text("#",450,150);
+				}
+				else{
+					text(" ",450,150);
+				}
+				*/
+				t = millisecond;
+				}
+			else {
+				strokeWeight(10);
+				for(xs = 0;xs<song_data[0][1].length;xs++){
+    		    text(song_data[0][1][xs],350, 130+xs*20);
+    		    text(song_data[0][2][xs],450, 130+xs*20);
+				}
+				strokeWeight(4);
+			}	
 		}
-		neck_diagram(cd[1],cd[2],cd[3],cd[4]);
-		
+		neck_diagram(cd[1],cd[2],cd[3],cd[4],fr_size,0);
+		//neck_diagram(cd2[1],cd2[2],cd2[3],cd2[4],0.5,1);
 	}
 	else{
-		neck_diagram(24,0,new_string,c_note);
+		neck_diagram(24,0,new_string,c_note,fr_size,0);
 	}
 	/*
 	data = {
@@ -372,6 +410,8 @@ function draw() {
 }
 
 function metronome(t){
+	var Yy = 300,Xx = 350;
+
 	var pnk='#ff00ff';
 	var lpnk ='#a70be0';
 	c0 = pnk;
@@ -382,30 +422,30 @@ function metronome(t){
 	switch(t%4){
     case 0:
         c0 = lpnk;
-        text(cd[0],350, 130)
+        text(cd[0],Xx, Yy+80);
         break;
     case 1:
     	c1 = lpnk;
-        text(cd[0],405, 130)
+        text(cd[0],Xx+55, Yy+80);
         break;
     case 2:
 		c2 = lpnk;
-        text(cd[0],460, 130)
+        text(cd[0],Xx+55*2, Yy+80);
         break;
     case 3:
 		c3 = lpnk;
-        text(cd[0],515, 130)
+        text(cd[0],Xx+55*3, Yy+80);
         break;
 }
 	strokeWeight(0);
 	fill(c0);
-	rect(350, 50, 50, 50, 10);
+	rect(Xx, Yy, 50, 50, 10);
 	fill(c1);
-	rect(405, 50, 50, 50, 10);
+	rect(Xx+55, Yy, 50, 50, 10);
 	fill(c2);
-	rect(460, 50, 50, 50, 10);
+	rect(Xx+2*55, Yy, 50, 50, 10);
 	fill(c3);
-	rect(515, 50, 50, 50, 10);
+	rect(Xx+3*55, Yy, 50, 50, 10);
 	fill(0);
 	strokeWeight(4);
 }

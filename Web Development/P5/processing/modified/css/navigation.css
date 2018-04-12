@@ -1,0 +1,72 @@
+body{
+  margin: 0px;
+  border: 0px;
+  padding: 0px;
+}
+#navig{
+  margin: 0px;
+  display: grid;
+  grid-gap:1em;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr 1fr;
+  /* background: linear-gradient(to right , rgba(100,100,100,1), rgba(50,50,50,0)); */
+  /* background: #f4f4f4; */
+  background: #fff;
+  box-shadow: 0px 0px 10px 0px #888888;
+  justify-items : center;
+}
+.header{
+  font-family: Sans-serif;
+  color: #000;
+  text-align:  center;
+  padding: 1em;
+  transition: 0.25s;
+  border-bottom : 4px solid;
+  border-bottom-color: #fff;
+}
+.header:hover{
+  color: #2196F3;
+  border-bottom-color: #f4c20d;
+  transition: border-bottom-color ease-out 0.5s;
+}
+#div1{
+  text-decoration: none;
+  grid-column:2/3;
+}
+
+#div2{
+  text-decoration: none;
+  grid-column:4/5;
+}
+#div3{
+  text-decoration: none;
+  grid-column:5/6;
+}
+.metronome > div{
+  display: inline-grid;
+  margin: 2px;
+  border-radius: 0.25em;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.Cnames{
+  width: 50px;
+  /* padding: 10px 0px; */
+  background : #00ffff;
+}
+
+.full_note{
+   /* display: inline-block; */
+  line-height:3;
+  height: 50px;
+  width: 50px;
+  background: #f4f4f4;
+}
+.half_note{
+ line-height:3;
+   /* display: inline-block; */
+  height: 50px;
+  width: 50px;
+  background: #fbfbfb;
+  align-self: end;
+}

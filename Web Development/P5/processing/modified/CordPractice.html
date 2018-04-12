@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>cords</title>
+  <style media="screen">
+  body{
+    font-family: sans-serif;
+  }
+    #min{
+      font-family: sans-serif;
+      display: inline-block;
+      border-radius: 5%;
+      /* -ms-transform: scale(2, 2); /* IE 9
+       -webkit-transform: scale(2, 2); /* Safari
+       transform: scale(2, 2); */
+      }
+    #plus,#minus{
+      font-size: 150%;
+      margin: 0.5em;
+      font-weight: bold;
+      display: inline-block;
+      border-width: 0px;
+      background: #ddd;
+      cursor: pointer;
+    }
+    #plus{
+      border-radius: 0% 50% 50% 0%;
+      padding-right: 0.5em;
+      padding-left: 0.5em;
+    }
+    #minus{
+      border-radius: 50% 0% 0% 50%;
+      padding-right: 0.5em;
+      padding-left: 0.5em;
+    }
+    #period{
+      font-size: 150%;
+      display: inline-block;
+      background: #f3f3f3;
+    }
+    ul{
+      padding-left: 0px;
+      /* padding: 10px; */
+      margin: 0.25em;
+      margin-bottom: 1em;
+      display: inline-block;
+    }
+    .clist label{
+      padding: 10px;
+      border-radius: 5px;
+      transition: 0.2s;
+    }
+    .clist label:hover{
+      cursor: pointer;
+      background: pink;
+    }
+    .clist input[type="checkbox"]{
+      visibility: hidden;
+    }
+    .clist input[type="checkbox"]:checked + label {
+      cursor: pointer;
+      background: orange;
+      color: #fff;
+    }
+  </style>
+  </head>
+  	<script src="script/libraries/p5.js"></script>
+  	<script src="script/libraries/p5.dom.js"></script>
+  	<script src="script/Diagrams.js"></script>
+  	<script src="script/Practice_chords.js"></script>
+  	<script src="script/libraries/p5.sound.js"></script>
+  	<script src="script/metronome.js"></script>
+  	<script src="script/Clock.js"></script>
+  	<link rel="stylesheet" href="/css/navigation.css">
+  	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
+  	<script async type="text/javascript" src="https://www.scales-chords.com/api/scales-chords-api.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="script/cordPractice.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/navigation.css">
+    <link rel="stylesheet" href="/css/cordPractice.css">
+
+  <body>
+    <div id="navig">
+    	<a id='div1' href="index.html"><div class='header'>Home</div></a>
+    	<a id='div2' href='CordPractice.html'><div class='header'>Chord_Practice</div></a>
+    	<a id='div3' href="SongPractice.html"><div class='header'>Song_Practice</div></a>
+    </div>
+    <div class="wraper">
+      <div id="canvs">
+      </div>
+      <div id="wraper"></div>
+      <div id="controls">
+        <div id="min"> Minutes :
+        <button id="minus" onclick="minutesm()">-</button>
+        <div id="period">1</div>
+        <button id="plus" onclick="minutesp()">+</button>
+        </div>
+        <button class='control_button' type="button" name="button" onclick="play_button()">
+          <i class="material-icons" style="font-size:36px" id='state'>play_arrow</i>
+        </button>
+        <i class="material-icons" id='volume'>volume_up</i>
+      </div>
+      <div id="chord_list"></div>
+    </div>
+    <center><h2>Select Chords from the list and Play</h2></center>
+  </body>
+</html>

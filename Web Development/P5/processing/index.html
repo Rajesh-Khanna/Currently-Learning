@@ -13,23 +13,25 @@
 	<script src="cord_practice.js"></script>
 	<script src="Clock.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.10.0/firebase.js"></script>
-
+	<script async type="text/javascript" src="https://www.scales-chords.com/api/scales-chords-api.js"></script>
 	<style>
 		body {
 			margin:0;
 			padding:0;
-			display: inline;
+    		display: block;
+    		align-items: center;
 		}
-		h2{
 
-		}
-		#list_cords{
+		#list_cords{/*
 			display: grid;
-			grid-template-columns:repeat(8,1fr);
+			/*grid-template-columns:repeat(8,1fr);
 			grid-gap : 1em;
+			justify-items : stret;*/
 		}
 
-		#list_cords > div{
+		#list_cords> div{
+			margin:0.5em;
+			display: inline-block;
 			background : #eee;
 			padding: 1em; 
 			transition: 0.5s;
@@ -68,13 +70,46 @@
 		canvas {
 			margin:auto;
 		}
+		#header{
+			margin: 0px;
+			display: grid;
+			grid-gap:1em;
+			grid-template-columns: 2fr 1fr 2fr 1fr 1fr 2fr;		
+			background: #f4f4f4;
+			justify-items : center;
+		}
+		#header > div{
+			text-align:  center;
+			padding: 1em;
+			transition: 0.25s;
+		}
+		#header > div:hover{
+			cursor: pointer;
+			color: #2196F3;
+			background : #eee;
+			/*background: linear-gradient(to bottom , #ff44ff, #f4f4f4, #f4f4f4, #f4f4f4, #ff44ff);*/
+		}
+		#div1{
+			grid-column:2/3;
+		}
+
+		#div2{
+			grid-column:4/5;
+		}
+
 	</style>
 </head>
 <body>
+<div id="header">
+	<div id='div1'>Home</div>
+	<div id='div2'>Cord practice</div>
+	<div id='div3'>Song practice</div>
+</div>
 	<h2>
 		<center>
 		<button type="button" id='b' name="Practice" onclick="practice()">Practice</button>
 	</center>
 	</h2>
+<div id="canvs"></div>
 </body>
 </html>

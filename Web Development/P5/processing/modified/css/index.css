@@ -1,0 +1,30 @@
+.container{
+  width: 60%;
+  margin-left: 20%;
+  font-style: italic;
+  font-family: sans-serif;
+  color: #132118;
+  font-size: 120%;
+  align-self: center;
+  display: grid;
+  grid-gap: 1em;
+  margin-bottom: 200px; 
+}
+.container > p:nth-child(even){
+  width: 60%;
+  justify-self: end;
+}
+.container > p:nth-child(odd){
+  width: 60%;
+  justify-self: start;
+}
+
+#g2{
+  justify-self: end;
+}
+#rules{
+  color: pink;
+}
+#S{
+  justify-self: center;
+}
