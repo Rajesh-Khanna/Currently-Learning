@@ -29,16 +29,25 @@ body,html{
   /* grid-auto-row: minmax(100px,auto); */
 }
 #drawboard{
+  position: relative;
   background: #deacff;
+}
+#drawboard>canvas{
+  position:absolute;
+  left: 0px;
+  top: 0px;
 }
 .feedback{
   margin-bottom: 1em;
-  background: #ffee00;
+  /* background: #ffffff; */
+  /* width: 100%; */
 }
 .shapesSelector{
   /* background: #00ff00; */
 }
 .pickerHSL{
+  /* visibility: hidden; */
+  display: none;
   margin: 1em;
   border-radius: 10px;
   padding: 1em;
@@ -143,4 +152,30 @@ body,html{
 .clselector>ul>li:hover{
   cursor: pointer;
   box-shadow: 0px 0px 5px;
+  transition: 0.25s;
+}
+.whiteCanvas:hover{
+  /* cursor: pointer; */
+}
+polyline:active{
+  /* opacity: 0.5; */
+}
+ellipse:active{
+  opacity: 0.5;
+}
+.skewing{
+  width: 100%;
+}
+.skewing>label{
+  margin-left: 20%;
+}
+.rules,.Instructions{
+  font-family: cursive;
+  margin: 0.5em;
+}
+.rules{
+  font-size: 130%;
+}
+i{
+  color: #f00;
 }
