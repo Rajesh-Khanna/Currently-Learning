@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Digit Recodgnition</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style media="screen">
+      html{
+        height: 100%;
+        width: 100%;
+        background: radial-gradient(farthest-corner at 100% 50%,#fff,#99cc9a);
+      }
+      #canvas{
+        position: relative;
+        background: #fff;
+        cursor: crosshair;
+      }
+      .drawPad{
+        display: inline-block;
+        border-style: solid;
+        border-width: 10px;
+      }
+      .container{
+        display: flex;
+        padding: 1em;
+        align-items: center;
+      }
+      .controls{
+        padding: 1em;
+        margin: 1em;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap : 1em;
+        align-items: center;
+      }
+      li{
+        list-style: none;
+        margin-top: 5px;
+      }
+      li > span{
+        display: inline-block;
+        background: #f0f;
+        font-style: italic;
+        font-family: cursive;
+        height: 10px;
+      }
+      button{
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        background: #daffa3;
+        color: white;
+        transition: 0.5s;
+        font-size: 150%;
+        font-family: cursive;
+        border-radius: 10px;
+      }
+      button:hover{
+        background: #2bbf33;
+        color: white;
+      }
+      #results{
+          font-family: sans-serif;
+          font-style: oblique;
+          font-size : 200%;
+          color: #42403e;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <h2>Recognizing handwritten Digits using Neural Network</h2>
+    </center>
+    <div class="container">
+      <div class="drawPad">
+        <canvas id="canvas" width="280" height="280"></canvas>
+      </div>
+      <div class="controls">
+        <div id="results">Predicted Output: </div>
+        <div class="expections">
+          <ul>
+            <li>0 <span class="guess"></span> </li>
+            <li>1 <span class="guess"></span></li>
+            <li>2 <span class="guess"></span></li>
+            <li>3 <span class="guess"></span></li>
+            <li>4 <span class="guess"></span></li>
+            <li>5 <span class="guess"></span></li>
+            <li>6 <span class="guess"></span></li>
+            <li>7 <span class="guess"></span></li>
+            <li>8 <span class="guess"></span></li>
+            <li>9 <span class="guess"></span></li>
+          </ul>
+        </div>
+        <div class="butons">
+          <button type="button" name="clear" id= "clear">clear &#10008;</button>
+          <button type="button" name="button" id="pridict">Predict</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    cnvs = document.getElementById('canvas');
+    var ctx=cnvs.getContext("2d");
+    evp = null;
+    active = false;
+    cnvs.onmousemove = function(ev){
+      cnvs.onmousedown = function(){
+        active = true;
+      }
+      cnvs.onmouseup = function(){
+        active = false;
+        evp = null
+        // $.post( "/postmethod", {
+        //   javascript_data: img
+        // });
+      }
+      if(active){
+        draw(ev)
+      }
+    }
+    $("#pridict").click(function(){
+      	   	var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    	   		var canvasObj = document.getElementById("canvas");
+    	   		var img = canvasObj.toDataURL();
+            console.log(typeof(img));
+    	   		$.ajax({
+    	   			type: "POST",
+    	   			url: $SCRIPT_ROOT + "/predict/",
+    	   			data: img,
+    	   			success: function(data){
+                console.log(data);
+                data = data.replace('\n','')
+                data = data.replace('  ',' ')
+                data = data.slice(1,-1);
+                var predata = []
+                data = data.split(" ");
+                for (var i =0;i<data.length;i++) {
+                  predata.push(parseFloat(data[i]));
+                }
+                console.log(predata);
+                var li = $(".guess");
+                var mx = 0;
+                var selec = 0;
+                for (var i = 0; i < li.length; i++) {
+                  li[i].style.width = predata[i]*200+"px";
+                  if(mx < predata[i]){
+                    mx = predata[i];
+                    selec = i;
+                  }
+                }
+                $('#results').text(' Predicted Output: ' + selec);
+    	   			}
+    	   		});
+          });
+
+    function draw(ev){
+      ctx.beginPath();
+      ctx.lineWidth = 15;
+      ctx.lineCap="round";
+      if(evp)
+        ctx.moveTo(evp.layerX,evp.layerY);
+      else
+        ctx.moveTo(ev.layerX,ev.layerY);
+      ctx.lineTo(ev.layerX,ev.layerY);
+      ctx.stroke();
+      evp = ev
+    }
+
+    var clearboard = document.getElementById('clear');
+    clearboard.onclick = function(){
+      ctx.clearRect(0, 0, cnvs.width, cnvs.height);
+    }
+  </script>
+</html>
